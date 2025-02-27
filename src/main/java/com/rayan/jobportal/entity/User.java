@@ -12,12 +12,12 @@ import java.util.Date;
 public class User {
 
 
-    public User(int userID, String email, boolean isActive, String password, Date registerionDate, UserType userTypeId) {
+    public User(int userID, String email, boolean isActive, String password, Date registrationDate, UserType userTypeId) {
         this.userID = userID;
         this.email = email;
         this.isActive = isActive;
         this.password = password;
-        this.registerionDate = registerionDate;
+        this.registrationDate = registrationDate;
         this.userTypeId = userTypeId;
     }
 
@@ -25,7 +25,7 @@ public class User {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userID;
 
     @Column(unique = true)
@@ -36,7 +36,7 @@ public class User {
     @NotEmpty
     private String password;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date registerionDate;
+    private Date registrationDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userTypeId",referencedColumnName = "userTypeId")
@@ -50,7 +50,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", isActive=" + isActive +
                 ", password='" + password + '\'' +
-                ", registerionDate=" + registerionDate +
+                ", registrationDate=" + registrationDate +
                 ", userTypeId=" + userTypeId +
                 '}';
     }
@@ -87,12 +87,12 @@ public class User {
         this.password = password;
     }
 
-    public Date getRegisterionDate() {
-        return registerionDate;
+    public Date getregistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegisterionDate(Date registerionDate) {
-        this.registerionDate = registerionDate;
+    public void setregistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public UserType getUserTypeId() {
