@@ -6,6 +6,7 @@ import com.rayan.jobportal.entity.User;
 import com.rayan.jobportal.repository.JobSeekerProfileRepository;
 import com.rayan.jobportal.repository.RecruiterProfileRepository;
 import com.rayan.jobportal.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -16,14 +17,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final JobSeekerProfileRepository jobSeekerRepository;
     private final RecruiterProfileRepository recruiterRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, JobSeekerProfileRepository jobSeekerRepository, RecruiterProfileRepository recruiterRepository) {
+    public UserService(UserRepository userRepository, JobSeekerProfileRepository jobSeekerRepository, RecruiterProfileRepository recruiterRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jobSeekerRepository = jobSeekerRepository;
         this.recruiterRepository = recruiterRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User addNewUser(User user) {
+        // Encrypt user password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActive(true);
         user.setRegistrationDate(new Date(System.currentTimeMillis()));
         User savedUser = userRepository.save(user);
