@@ -1,6 +1,10 @@
 package com.rayan.jobportal.service;
 
+import com.rayan.jobportal.entity.JobSeekerProfile;
+import com.rayan.jobportal.entity.RecruiterProfile;
 import com.rayan.jobportal.entity.User;
+import com.rayan.jobportal.repository.JobSeekerProfileRepository;
+import com.rayan.jobportal.repository.RecruiterProfileRepository;
 import com.rayan.jobportal.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,15 +14,27 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final JobSeekerProfileRepository jobSeekerRepository;
+    private final RecruiterProfileRepository recruiterRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, JobSeekerProfileRepository jobSeekerRepository, RecruiterProfileRepository recruiterRepository) {
         this.userRepository = userRepository;
+        this.jobSeekerRepository = jobSeekerRepository;
+        this.recruiterRepository = recruiterRepository;
     }
 
     public User addNewUser(User user) {
         user.setActive(true);
         user.setRegistrationDate(new Date(System.currentTimeMillis()));
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        int userTypeId = user.getUserTypeId().getUserTypeId();
+        if (userTypeId == 1) {
+            recruiterRepository.save(new RecruiterProfile(savedUser));
+        } else {
+            jobSeekerRepository.save(new JobSeekerProfile(savedUser));
+
+        }
+        return savedUser;
     }
 
 
