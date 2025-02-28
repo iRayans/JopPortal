@@ -12,8 +12,8 @@ import java.util.Date;
 public class User {
 
 
-    public User(int userID, String email, boolean isActive, String password, Date registrationDate, UserType userTypeId) {
-        this.userID = userID;
+    public User(int userId, String email, boolean isActive, String password, Date registrationDate, UserType userTypeId) {
+        this.userId = userId;
         this.email = email;
         this.isActive = isActive;
         this.password = password;
@@ -26,7 +26,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userID;
+    private int userId;
 
     @Column(unique = true)
     private String email;
@@ -46,7 +46,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userID=" + userID +
+                "userId=" + userId +
                 ", email='" + email + '\'' +
                 ", isActive=" + isActive +
                 ", password='" + password + '\'' +
@@ -55,13 +55,7 @@ public class User {
                 '}';
     }
 
-    public int getUserID() {
-        return userID;
-    }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
 
     public String getEmail() {
         return email;
@@ -87,11 +81,19 @@ public class User {
         this.password = password;
     }
 
-    public Date getregistrationDate() {
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public Date getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setregistrationDate(Date registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
 
