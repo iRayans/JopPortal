@@ -4,8 +4,13 @@ import com.rayan.jobportal.entity.User;
 import com.rayan.jobportal.entity.UserType;
 import com.rayan.jobportal.service.UserService;
 import com.rayan.jobportal.service.UserTypeService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +40,10 @@ public class UserController {
     }
 
     @PostMapping("/register/new")
-    public String register(@Valid User user,Model model ) {
+    public String register(@Valid User user, Model model) {
 
         Optional<User> userByEmail = userService.findUserByEmail(user.getEmail());
-        if(userByEmail.isPresent()) {
+        if (userByEmail.isPresent()) {
             model.addAttribute("error", "This email address is already in use");
             List<UserType> userTypes = userTypeService.getAll();
             model.addAttribute("getAllTypes", userTypes);
@@ -46,6 +51,20 @@ public class UserController {
             return "register";
         }
         userService.addNewUser(user);
-        return "dashboard";
+        return "redirect:/dashboard/";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/";
     }
 }
